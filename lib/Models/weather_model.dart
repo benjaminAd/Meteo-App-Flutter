@@ -39,7 +39,7 @@ class WeatherModel {
         _list.add(new WeatherList.fromJson(v));
       });
     }
-    _city = (json['city'] != null ? new City.fromJson(json['city']) : null)!;
+    _city = (json['city'] != null ? new City.fromJson(json['city']) : new City(0,"nia", new Coord(0.0, 0.0),"Country",0,9,0,0));
   }
 
   Map<String, dynamic> toJson() {
@@ -64,13 +64,12 @@ class WeatherList {
   late Clouds _clouds;
   late Wind _wind;
   late int _visibility;
-  late double _pop;
   late Sys _sys;
   late String _dtTxt;
   late Rain _rain;
 
   WeatherList(this._dt, this._main, this._weather, this._clouds, this._wind,
-      this._visibility, this._pop, this._sys, this._dtTxt, this._rain);
+      this._visibility, this._sys, this._dtTxt, this._rain);
 
   int get dt => _dt;
 
@@ -96,10 +95,6 @@ class WeatherList {
 
   set visibility(int visibility) => _visibility = visibility;
 
-  double get pop => _pop;
-
-  set pop(double pop) => _pop = pop;
-
   Sys get sys => _sys;
 
   set sys(Sys sys) => _sys = sys;
@@ -114,7 +109,7 @@ class WeatherList {
 
   WeatherList.fromJson(Map<String, dynamic> json) {
     _dt = json['dt'];
-    _main = (json['main'] != null ? new Main.fromJson(json['main']) : null)!;
+    _main = (json['main'] != null ? new Main.fromJson(json['main']) : new Main(0,0,0,0,0,0,0));
     if (json['weather'] != null) {
       _weather = [];
       json['weather'].forEach((v) {
@@ -122,13 +117,12 @@ class WeatherList {
       });
     }
     _clouds =
-        (json['clouds'] != null ? new Clouds.fromJson(json['clouds']) : null)!;
-    _wind = (json['wind'] != null ? new Wind.fromJson(json['wind']) : null)!;
+        (json['clouds'] != null ? new Clouds.fromJson(json['clouds']) : new Clouds(0));
+    _wind = (json['wind'] != null ? new Wind.fromJson(json['wind']) : new Wind(0, 0, 0));
     _visibility = json['visibility'];
-    _pop = json['pop'];
-    _sys = (json['sys'] != null ? new Sys.fromJson(json['sys']) : null)!;
+    _sys = (json['sys'] != null ? new Sys.fromJson(json['sys']) : new Sys(""));
     _dtTxt = json['dt_txt'];
-    _rain = (json['rain'] != null ? new Rain.fromJson(json['rain']) : null)!;
+    _rain = (json['rain'] != null ? new Rain.fromJson(json['rain']) : new Rain(0));
   }
 
   Map<String, dynamic> toJson() {
@@ -147,7 +141,6 @@ class WeatherList {
       data['wind'] = this._wind.toJson();
     }
     data['visibility'] = this._visibility;
-    data['pop'] = this._pop;
     if (this._sys != null) {
       data['sys'] = this._sys.toJson();
     }
@@ -161,33 +154,25 @@ class WeatherList {
 
 class Main {
   late double _temp;
-  late double _feelsLike;
   late double _tempMin;
   late double _tempMax;
   late int _pressure;
   late int _seaLevel;
   late int _grndLevel;
   late int _humidity;
-  late double _tempKf;
 
   Main(
       this._temp,
-      this._feelsLike,
       this._tempMin,
       this._tempMax,
       this._pressure,
       this._seaLevel,
       this._grndLevel,
-      this._humidity,
-      this._tempKf);
+      this._humidity);
 
   double get temp => _temp;
 
   set temp(double temp) => _temp = temp;
-
-  double get feelsLike => _feelsLike;
-
-  set feelsLike(double feelsLike) => _feelsLike = feelsLike;
 
   double get tempMin => _tempMin;
 
@@ -213,33 +198,25 @@ class Main {
 
   set humidity(int humidity) => _humidity = humidity;
 
-  double get tempKf => _tempKf;
-
-  set tempKf(double tempKf) => _tempKf = tempKf;
-
   Main.fromJson(Map<String, dynamic> json) {
     _temp = json['temp'];
-    _feelsLike = json['feels_like'];
     _tempMin = json['temp_min'];
     _tempMax = json['temp_max'];
     _pressure = json['pressure'];
     _seaLevel = json['sea_level'];
     _grndLevel = json['grnd_level'];
     _humidity = json['humidity'];
-    _tempKf = json['temp_kf'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['temp'] = this._temp;
-    data['feels_like'] = this._feelsLike;
     data['temp_min'] = this._tempMin;
     data['temp_max'] = this._tempMax;
     data['pressure'] = this._pressure;
     data['sea_level'] = this._seaLevel;
     data['grnd_level'] = this._grndLevel;
     data['humidity'] = this._humidity;
-    data['temp_kf'] = this._tempKf;
     return data;
   }
 }
@@ -428,7 +405,7 @@ class City {
     _id = json['id'];
     _name = json['name'];
     _coord =
-        (json['coord'] != null ? new Coord.fromJson(json['coord']) : null)!;
+        (json['coord'] != null ? new Coord.fromJson(json['coord']) : new Coord(0,0));
     _country = json['country'];
     _population = json['population'];
     _timezone = json['timezone'];

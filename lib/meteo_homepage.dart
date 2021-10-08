@@ -86,6 +86,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                             )
                           ];
                         } else if (snapshot.hasError) {
+                          print("Error ->" + snapshot.error.toString());
                           children = <Widget>[
                             const Icon(
                               Icons.error_outline,
