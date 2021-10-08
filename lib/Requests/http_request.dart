@@ -7,8 +7,7 @@ import 'package:meteo/Models/weather_model.dart';
 class Network {
   Future<WeatherModel> getWeatherFromCityName(
       {required String cityName}) async {
-    var url =
-        "api.openweathermap.org/data/2.5/forecast?q=$cityName,us&mode=xml&appid=${Constant.api_Key}";
+    var url = "https://api.openweathermap.org/data/2.5/forecast?q=$cityName,us&mode=json&appid=${Constant.api_Key}";
     final response = await get(Uri.parse(url));
     print("URL : ${Uri.encodeFull(url)}");
 
