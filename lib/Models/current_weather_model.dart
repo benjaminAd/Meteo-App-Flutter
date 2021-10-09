@@ -6,6 +6,7 @@ class CurrentWeatherModel {
   late int _visibility;
   late Wind _wind;
   late Clouds _clouds;
+  late Rain _rain;
   late int _dt;
   late Sys _sys;
   late int _timezone;
@@ -21,6 +22,7 @@ class CurrentWeatherModel {
       this._visibility,
       this._wind,
       this._clouds,
+      this._rain,
       this._dt,
       this._sys,
       this._timezone,
@@ -55,6 +57,12 @@ class CurrentWeatherModel {
   Clouds get clouds => _clouds;
 
   set clouds(Clouds clouds) => _clouds = clouds;
+
+  Rain get rain => _rain;
+
+  set rain(Rain value) {
+    _rain = value;
+  }
 
   int get dt => _dt;
 
@@ -100,6 +108,8 @@ class CurrentWeatherModel {
     _clouds = json['clouds'] != null
         ? new Clouds.fromJson(json['clouds'])
         : new Clouds(0);
+    _rain =
+        (json['rain'] != null ? new Rain.fromJson(json['rain']) : new Rain(0,0));
     _dt = json['dt'];
     _sys = json['sys'] != null
         ? new Sys.fromJson(json['sys'])
@@ -128,6 +138,9 @@ class CurrentWeatherModel {
     }
     if (this._clouds != null) {
       data['clouds'] = this._clouds.toJson();
+    }
+    if (this._rain != null) {
+      data['rain'] = this._rain.toJson();
     }
     data['dt'] = this._dt;
     if (this._sys != null) {
@@ -356,6 +369,37 @@ class Sys {
     data['country'] = this._country;
     data['sunrise'] = this._sunrise;
     data['sunset'] = this._sunset;
+    return data;
+  }
+}
+
+class Rain {
+  late double _d3h;
+  late double _d1h;
+
+
+  Rain(this._d3h, this._d1h);
+
+  double get d3h => _d3h;
+
+  set d3h(double d3h) => _d3h = d3h;
+
+
+  double get d1h => _d1h;
+
+  set d1h(double value) {
+    _d1h = value;
+  }
+
+  Rain.fromJson(Map<String, dynamic> json) {
+    _d3h = (json['3h'] != null) ? json['3h'].toDouble() : 0;
+    _d1h = (json['1h'] != null) ? json['1h'].toDouble() : 0;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['3h'] = this._d3h;
+    data['1h']= this._d1h;
     return data;
   }
 }

@@ -25,6 +25,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
       0,
       new Wind(0, 0),
       new Clouds(0),
+      new Rain(0, 0),
       0,
       new Sys(0, 0, "", 0, 0),
       0,
@@ -117,7 +118,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                       weatherDescription:
                                           current_weather.weather.first.main,
                                       size: MediaQuery.of(context).size.width *
-                                          0.5),
+                                          0.4),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.05,
@@ -128,7 +129,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "${convertFahrenheitToCelcius(current_weather.main.temp).toStringAsFixed(2)} C°",
+                                        "${convertFahrenheitToCelcius(current_weather.main.temp).toStringAsFixed(2)}°C",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: MediaQuery.of(context)
@@ -183,6 +184,34 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                           ),
                                         ],
                                       )),
+                                      if (current_weather.weather.first.main ==
+                                          "Rain")
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            Text(
+                                              "${current_weather.rain.d1h} mm",
+                                            ),
+                                            Icon(
+                                              FontAwesomeIcons.cloudRain,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ],
+                                        )),
+                                      if (current_weather.weather.first.main ==
+                                          "Rain")
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            Text(
+                                              "${current_weather.rain.d3h} mm",
+                                            ),
+                                            Icon(
+                                              FontAwesomeIcons.cloudRain,
+                                              color: Colors.lightBlue,
+                                            ),
+                                          ],
+                                        )),
                                     ],
                                   ),
                                   SizedBox(
@@ -242,106 +271,128 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                                       0.5,
                                                   child: Card(
                                                     color: Colors.pink,
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        ListTile(
-                                                          leading: getWeatherIcon(
-                                                              weatherDescription:
-                                                                  daily
-                                                                      .weather
-                                                                      .first
-                                                                      .main,
-                                                              size: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.05),
-                                                          title: Text(new DateFormat(
-                                                                  'EEEE')
-                                                              .format(DateTime(
-                                                                  today.year,
-                                                                  today.month,
-                                                                  (today.day!! +
-                                                                      (index +
-                                                                          1))))),
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                                "${convertFahrenheitToCelcius(daily.temp.min).toStringAsFixed(0)}°C"),
-                                                            Icon(FontAwesomeIcons
-                                                                .thermometerHalf),
-                                                            SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.01,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          ListTile(
+                                                            leading: getWeatherIcon(
+                                                                weatherDescription:
+                                                                    daily
+                                                                        .weather
+                                                                        .first
+                                                                        .main,
+                                                                size: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.05),
+                                                            title: Text(new DateFormat(
+                                                                    'EEEE')
+                                                                .format(DateTime(
+                                                                    today.year,
+                                                                    today.month,
+                                                                    (today.day!! +
+                                                                        (index +
+                                                                            1))))),
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                  "${convertFahrenheitToCelcius(daily.temp.min).toStringAsFixed(0)}°C"),
+                                                              Icon(FontAwesomeIcons
+                                                                  .thermometerHalf),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.01,
+                                                              ),
+                                                              Text(
+                                                                  "${convertFahrenheitToCelcius(daily.temp.max).toStringAsFixed(0)}°C"),
+                                                              Icon(FontAwesomeIcons
+                                                                  .thermometerFull),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.01,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                  "${daily.humidity}%"),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.01,
+                                                              ),
+                                                              Icon(
+                                                                  FontAwesomeIcons
+                                                                      .tint),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.01,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                  "${daily.windSpeed} m/s"),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.01,
+                                                              ),
+                                                              Icon(
+                                                                  FontAwesomeIcons
+                                                                      .wind),
+                                                            ],
+                                                          ),
+                                                          if (daily.rain != 0.0)
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    "${daily.rain} mm"),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.01,
+                                                                ),
+                                                                Icon(FontAwesomeIcons
+                                                                    .cloudRain),
+                                                              ],
                                                             ),
-                                                            Text(
-                                                                "${convertFahrenheitToCelcius(daily.temp.max).toStringAsFixed(0)}°C"),
-                                                            Icon(FontAwesomeIcons
-                                                                .thermometerFull),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.01,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                                "${daily.humidity}%"),
-                                                            SizedBox(
-                                                              width: MediaQuery.of(
-                                                                  context)
-                                                                  .size
-                                                                  .width *
-                                                                  0.01,
-                                                            ),
-                                                            Icon(
-                                                                FontAwesomeIcons
-                                                                    .tint),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.01,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                                "${daily.windSpeed} m/s"),
-                                                            SizedBox(
-                                                              width: MediaQuery.of(
-                                                                  context)
-                                                                  .size
-                                                                  .width *
-                                                                  0.01,
-                                                            ),
-                                                            Icon(
-                                                                FontAwesomeIcons
-                                                                    .wind),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 );
