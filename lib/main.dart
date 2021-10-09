@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meteo/cubit/weather_cubit.dart';
+import 'package:meteo/cubit/city_name_cubit.dart';
 import 'package:meteo/meteo_homepage.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => WeatherCubit()..getWeatherModel(cityName: "Paris"),
+        create: (context) => CityNameCubit(),
         child: MeteoHomePage(),
       ),
     );

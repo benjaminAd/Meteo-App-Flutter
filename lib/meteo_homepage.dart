@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meteo/Models/weather_model.dart';
 import 'package:meteo/Requests/http_request.dart';
-import 'package:meteo/cubit/weather_cubit.dart';
+import 'package:meteo/cubit/city_name_cubit.dart';
 
 class MeteoHomePage extends StatefulWidget {
   const MeteoHomePage({Key? key}) : super(key: key);
@@ -14,7 +14,9 @@ class MeteoHomePage extends StatefulWidget {
 
 class _MeteoHomePageState extends State<MeteoHomePage> {
   TextEditingController _controller = TextEditingController();
-  bool isResearchOn = false;
+  final _myNetwork = new Network();
+  WeatherModel old_data = new WeatherModel(
+      "", 0, 0, [], new City(0, "", new Coord(0, 0), "", 0, 0, 0, 0));
 
   @override
   void dispose() {
@@ -53,10 +55,9 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                       flex: 1,
                       child: IconButton(
                         onPressed: () {
-                          context.read<WeatherCubit>().setEmptyWeatherModel();
-                          context
-                              .read<WeatherCubit>()
-                              .getWeatherModel(cityName: _controller.text);
+                          context.read<CityNameCubit>().cityName =
+                              _controller.text;
+                          context.read<CityNameCubit>().emitCityName();
                         },
                         icon: FaIcon(FontAwesomeIcons.search),
                       ),
@@ -66,24 +67,82 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                        BlocBuilder<WeatherCubit, WeatherModel>(
-                            builder: (context, weather_model) {
-                              if (weather_model.cod == "") {
-                                return CircularProgressIndicator();
-                              }
-                              return Card(
-                                child: ListTile(
-                                  title: Text(weather_model.city.name),
-                                  subtitle: Text("Vitesse du vent : ${weather_model.list[0].wind.speed}"),
-                                ),
-                              );
-                            },
-                          )
-                  ],
+                width: MediaQuery.of(context).size.width,
+                child: BlocBuilder<CityNameCubit, String>(
+                  builder: (context, cityName) {
+                    return FutureBuilder<WeatherModel>(
+                        future: _myNetwork.getWeatherFromCityName(
+                            cityName: cityName),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<WeatherModel> snapshot) {
+                          if (snapshot.hasData && old_data != snapshot.data) {
+                            old_data = snapshot.data!;
+                            return Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(snapshot.data!.city.name),
+                                  Text(snapshot.data!.city.timezone.toString())
+                                ],
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            print("Error ->" + snapshot.error.toString());
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
+                                    size: 60,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 16),
+                                    child: Text('Error: ${snapshot.error}'),
+                                  )
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    child: CircularProgressIndicator(),
+                                    width: 60,
+                                    height: 60,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 16),
+                                    child: Text("Récupération des données..."),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        });
+                    /*if (weathermodel.cod == "") {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          Text("Récupération des données")
+                        ],
+                      );
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(weathermodel.city.name),
+                        Text(weathermodel.city.timezone.toString())
+                      ],
+                    );*/
+                  },
                 ),
               ),
             ],
