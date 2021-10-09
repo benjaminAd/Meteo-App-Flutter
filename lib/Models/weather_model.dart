@@ -118,7 +118,7 @@ class WeatherList {
     }
     _clouds =
         (json['clouds'] != null ? new Clouds.fromJson(json['clouds']) : new Clouds(0));
-    _wind = (json['wind'] != null ? new Wind.fromJson(json['wind']) : new Wind(0, 0, 0));
+    _wind = (json['wind'] != null ? new Wind.fromJson(json['wind']) : new Wind(0, 0));
     _visibility = json['visibility'];
     _sys = (json['sys'] != null ? new Sys.fromJson(json['sys']) : new Sys(""));
     _dtTxt = json['dt_txt'];
@@ -199,9 +199,9 @@ class Main {
   set humidity(int humidity) => _humidity = humidity;
 
   Main.fromJson(Map<String, dynamic> json) {
-    _temp = json['temp'];
-    _tempMin = json['temp_min'];
-    _tempMax = json['temp_max'];
+    _temp = json['temp'].toDouble();
+    _tempMin = json['temp_min'].toDouble();
+    _tempMax = json['temp_max'].toDouble();
     _pressure = json['pressure'];
     _seaLevel = json['sea_level'];
     _grndLevel = json['grnd_level'];
@@ -285,9 +285,8 @@ class Clouds {
 class Wind {
   late double _speed;
   late int _deg;
-  late double _gust;
 
-  Wind(this._speed, this._deg, this._gust);
+  Wind(this._speed, this._deg);
 
   double get speed => _speed;
 
@@ -297,21 +296,15 @@ class Wind {
 
   set deg(int deg) => _deg = deg;
 
-  double get gust => _gust;
-
-  set gust(double gust) => _gust = gust;
-
   Wind.fromJson(Map<String, dynamic> json) {
-    _speed = json['speed'];
+    _speed = json['speed'].toDouble();
     _deg = json['deg'];
-    _gust = json['gust'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['speed'] = this._speed;
     data['deg'] = this._deg;
-    data['gust'] = this._gust;
     return data;
   }
 }
@@ -346,7 +339,7 @@ class Rain {
   set d3h(double d3h) => _d3h = d3h;
 
   Rain.fromJson(Map<String, dynamic> json) {
-    _d3h = json['3h'];
+    _d3h = json['3h'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -444,8 +437,8 @@ class Coord {
   set lon(double lon) => _lon = lon;
 
   Coord.fromJson(Map<String, dynamic> json) {
-    _lat = json['lat'];
-    _lon = json['lon'];
+    _lat = json['lat'].toDouble();
+    _lon = json['lon'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
