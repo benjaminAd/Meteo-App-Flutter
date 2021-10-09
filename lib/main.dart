@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => WeatherCubit(),
+        create: (context) => WeatherCubit()..getWeatherModel(cityName: "Paris"),
         child: MeteoHomePage(),
       ),
     );
