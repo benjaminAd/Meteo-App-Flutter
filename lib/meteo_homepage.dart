@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -97,7 +98,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                 ],
               ),
               SizedBox(
-                height:MediaQuery.of(context).size.height*0.05,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               BlocBuilder<CityNameCubit, String>(
                 builder: (context, cityName) {
@@ -109,6 +110,14 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                         if (snapshot.hasData && old_data != snapshot.data) {
                           old_data = snapshot.data!;
                           var current_weather = snapshot.data!;
+                          print("sunset ->" +
+                              DateFormat('MM/dd/yyyy, hh:mm a').format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      current_weather.sys.sunset * 1000)));
+                          print("sunrise -> " +
+                              DateFormat('MM/dd/yyyy, hh:mm a').format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      current_weather.sys.sunrise * 1000)));
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -216,6 +225,13 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                           children: [
                                             Text(
                                               "${current_weather.wind.speed} m/s",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
                                             ),
                                             Icon(
                                               FontAwesomeIcons.wind,
@@ -228,6 +244,13 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                           children: [
                                             Text(
                                               "${current_weather.main.humidity}%",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
                                             ),
                                             Icon(
                                               FontAwesomeIcons.tint,
@@ -238,11 +261,19 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                         if (current_weather
                                                 .weather.first.main ==
                                             "Rain")
-                                          Expanded(
+                                          if(current_weather.rain.d1h!= 0.0)Expanded(
                                               child: Column(
                                             children: [
                                               Text(
                                                 "${current_weather.rain.d1h} mm",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.05,
+                                                ),
                                               ),
                                               Icon(
                                                 FontAwesomeIcons.cloudRain,
@@ -253,11 +284,19 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                         if (current_weather
                                                 .weather.first.main ==
                                             "Rain")
-                                          Expanded(
+                                          if(current_weather.rain.d3h!= 0.0)Expanded(
                                               child: Column(
                                             children: [
                                               Text(
                                                 "${current_weather.rain.d3h} mm",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.05,
+                                                ),
                                               ),
                                               Icon(
                                                 FontAwesomeIcons.cloudRain,
@@ -265,6 +304,69 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                               ),
                                             ],
                                           )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.03,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Icon(CupertinoIcons.sunrise_fill,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                color: Color.fromRGBO(
+                                                    0xF7, 0xCD, 0x5D, 1)),
+                                            Text(
+                                              DateFormat("HH:mm").format(DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                      current_weather
+                                                              .sys.sunrise *
+                                                          1000)),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.sunset_fill,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2,
+                                              color: Color.fromRGBO(
+                                                  0xEE, 0x5D, 0x6C, 1),
+                                            ),
+                                            Text(
+                                              DateFormat("H:m").format(DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                      current_weather
+                                                              .sys.sunset *
+                                                          1000)),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                     SizedBox(
@@ -303,7 +405,8 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                 ),
                               ),
                               SizedBox(
-                                height:MediaQuery.of(context).size.height*0.03,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                               Text(
                                 "Prévisions sur 7 jours",
@@ -314,7 +417,8 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                 ),
                               ),
                               SizedBox(
-                                height:MediaQuery.of(context).size.height*0.03,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                               FutureBuilder<SevenDaysForecastModel>(
                                 future: _myNetwork
