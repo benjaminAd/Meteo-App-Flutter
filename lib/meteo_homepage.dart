@@ -35,7 +35,6 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
 
   SevenDaysForecastModel old_forecast =
       new SevenDaysForecastModel(0, 0, "", 0, []);
-  final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
 
   @override
   void dispose() {
@@ -48,13 +47,21 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color.fromARGB(0xFF, 0x10, 0x10, 0x37),
+                  Color.fromARGB(0xFF, 0x46, 0x45, 0x70),
+                ]),
+          ),
+          height: MediaQuery.of(context).size.height * 1.1,
           child: Column(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.2,
+              Expanded(
+                flex: 1,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 5,
@@ -64,6 +71,8 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                         child: TextField(
                           controller: _controller,
                           decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
                             border: OutlineInputBorder(),
                             hintText: "nom de la ville",
                           ),
@@ -78,13 +87,17 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                               _controller.text;
                           context.read<CityNameCubit>().emitCityName();
                         },
-                        icon: FaIcon(FontAwesomeIcons.search),
+                        icon: FaIcon(
+                          FontAwesomeIcons.search,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
+              Expanded(
+                flex: 4,
                 child: BlocBuilder<CityNameCubit, String>(
                   builder: (context, cityName) {
                     return FutureBuilder<CurrentWeatherModel>(
@@ -95,361 +108,497 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                           if (snapshot.hasData && old_data != snapshot.data) {
                             old_data = snapshot.data!;
                             var current_weather = snapshot.data!;
-                            return Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "${current_weather.name},${current_weather.sys.country}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.1,
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          Color.fromRGBO(0x79, 0x79, 0xA3, 0.3),
                                     ),
-                                  ),
-                                  Text(new DateFormat('EEEE d MMMM y, H:mm')
-                                      .format(DateTime.now())),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                  ),
-                                  getWeatherIcon(
-                                      weatherDescription:
-                                          current_weather.weather.first.main,
-                                      size: MediaQuery.of(context).size.width *
-                                          0.4),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "${convertFahrenheitToCelcius(current_weather.main.temp).toStringAsFixed(2)}°C",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05,
-                                        ),
-                                      ),
-                                      Icon(
-                                        FontAwesomeIcons.thermometerHalf,
-                                        color: Colors.red,
-                                        size:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.03,
-                                      ),
-                                      Text(
-                                          "${current_weather.weather.first.description}"),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          Text(
-                                            "${current_weather.wind.speed} m/s",
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.wind,
-                                            color: Colors.blueGrey,
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          Text(
-                                            "${current_weather.main.humidity}%",
-                                          ),
-                                          Icon(
-                                            FontAwesomeIcons.tint,
-                                            color: Colors.lightBlue,
-                                          ),
-                                        ],
-                                      )),
-                                      if (current_weather.weather.first.main ==
-                                          "Rain")
-                                        Expanded(
-                                            child: Column(
-                                          children: [
-                                            Text(
-                                              "${current_weather.rain.d1h} mm",
-                                            ),
-                                            Icon(
-                                              FontAwesomeIcons.cloudRain,
-                                              color: Colors.blueAccent,
-                                            ),
-                                          ],
-                                        )),
-                                      if (current_weather.weather.first.main ==
-                                          "Rain")
-                                        Expanded(
-                                            child: Column(
-                                          children: [
-                                            Text(
-                                              "${current_weather.rain.d3h} mm",
-                                            ),
-                                            Icon(
-                                              FontAwesomeIcons.cloudRain,
-                                              color: Colors.lightBlue,
-                                            ),
-                                          ],
-                                        )),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                  ),
-                                  Text("Prévisions sur 7 jours"),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  FutureBuilder<SevenDaysForecastModel>(
-                                    future: _myNetwork
-                                        .getSevenDaysForecastFromLongAndLat(
-                                            lon: current_weather.coord.lon,
-                                            lat: current_weather.coord.lat,
-                                            cityName: current_weather.name),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<SevenDaysForecastModel>
-                                            snapshot) {
-                                      if (snapshot.hasData &&
-                                          old_forecast != snapshot.data!) {
-                                        old_forecast = snapshot.data!;
-                                        var actual_forecast = snapshot.data!;
-                                        return Container(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.2,
-                                          margin: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.05,
-                                            right: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.05,
-                                            bottom: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.1,
+                                              0.01,
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                "Today",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.08,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                new DateFormat('EE, d MMM')
+                                                    .format(DateTime.now()),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount:
-                                                  actual_forecast.daily.length -
-                                                      1,
-                                              itemBuilder: (context, index) {
-                                                var daily = actual_forecast
-                                                    .daily[index + 1];
-                                                var today = DateTime.now();
-                                                return Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  child: Card(
-                                                    color: Colors.pink,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          ListTile(
-                                                            leading: getWeatherIcon(
-                                                                weatherDescription:
-                                                                    daily
-                                                                        .weather
-                                                                        .first
-                                                                        .main,
-                                                                size: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.05),
-                                                            title: Text(new DateFormat(
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${convertFahrenheitToCelcius(current_weather.main.temp).toStringAsFixed(0)}",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.15,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "°C",
+                                                      style: TextStyle(
+                                                        color: Colors.orange,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.06,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: getWeatherIcon(
+                                                    weatherDescription:
+                                                        current_weather
+                                                            .weather.first.main,
+                                                    size: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.2),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                  child: Column(
+                                                children: [
+                                                  Text(
+                                                    "${current_weather.wind.speed} m/s",
+                                                  ),
+                                                  Icon(
+                                                    FontAwesomeIcons.wind,
+                                                    color: Colors.blueGrey,
+                                                  ),
+                                                ],
+                                              )),
+                                              Expanded(
+                                                  child: Column(
+                                                children: [
+                                                  Text(
+                                                    "${current_weather.main.humidity}%",
+                                                  ),
+                                                  Icon(
+                                                    FontAwesomeIcons.tint,
+                                                    color: Colors.lightBlue,
+                                                  ),
+                                                ],
+                                              )),
+                                              if (current_weather
+                                                      .weather.first.main ==
+                                                  "Rain")
+                                                Expanded(
+                                                    child: Column(
+                                                  children: [
+                                                    Text(
+                                                      "${current_weather.rain.d1h} mm",
+                                                    ),
+                                                    Icon(
+                                                      FontAwesomeIcons
+                                                          .cloudRain,
+                                                      color: Colors.blueAccent,
+                                                    ),
+                                                  ],
+                                                )),
+                                              if (current_weather
+                                                      .weather.first.main ==
+                                                  "Rain")
+                                                Expanded(
+                                                    child: Column(
+                                                  children: [
+                                                    Text(
+                                                      "${current_weather.rain.d3h} mm",
+                                                    ),
+                                                    Icon(
+                                                      FontAwesomeIcons
+                                                          .cloudRain,
+                                                      color: Colors.lightBlue,
+                                                    ),
+                                                  ],
+                                                )),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.mapMarkerAlt,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                "${current_weather.name},${current_weather.sys.country}",
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.05,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.02,
+                                ),
+                                Text(
+                                  "Prévisions sur 7 jours",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.05,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.01,
+                                ),
+                                FutureBuilder<SevenDaysForecastModel>(
+                                  future: _myNetwork
+                                      .getSevenDaysForecastFromLongAndLat(
+                                          lon: current_weather.coord.lon,
+                                          lat: current_weather.coord.lat,
+                                          cityName: current_weather.name),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<SevenDaysForecastModel>
+                                          snapshot) {
+                                    if (snapshot.hasData &&
+                                        old_forecast != snapshot.data!) {
+                                      old_forecast = snapshot.data!;
+                                      var actual_forecast = snapshot.data!;
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.2,
+                                        margin: EdgeInsets.only(
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1,
+                                        ),
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                actual_forecast.daily.length -
+                                                    1,
+                                            itemBuilder: (context, index) {
+                                              var daily = actual_forecast
+                                                  .daily[index + 1];
+                                              var today = DateTime.now();
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Color.fromRGBO(
+                                                      0x79, 0x79, 0xA3, 0.3),
+                                                ),
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.02),
+                                                child: Container(
+                                                  color: Color.fromRGBO(
+                                                      0x79, 0x79, 0xA3, 0.3),
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        ListTile(
+                                                          leading: getWeatherIcon(
+                                                              weatherDescription:
+                                                                  daily
+                                                                      .weather
+                                                                      .first
+                                                                      .main,
+                                                              size: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.05),
+                                                          title: Text(
+                                                            new DateFormat(
                                                                     'EEEE')
                                                                 .format(DateTime(
                                                                     today.year,
                                                                     today.month,
                                                                     (today.day!! +
                                                                         (index +
-                                                                            1))))),
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                  "${convertFahrenheitToCelcius(daily.temp.min).toStringAsFixed(0)}°C"),
-                                                              Icon(FontAwesomeIcons
-                                                                  .thermometerHalf),
-                                                              SizedBox(
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.01,
-                                                              ),
-                                                              Text(
-                                                                  "${convertFahrenheitToCelcius(daily.temp.max).toStringAsFixed(0)}°C"),
-                                                              Icon(FontAwesomeIcons
-                                                                  .thermometerFull),
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            height: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .height *
-                                                                0.01,
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                  "${daily.humidity}%"),
-                                                              SizedBox(
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.01,
-                                                              ),
-                                                              Icon(
-                                                                  FontAwesomeIcons
-                                                                      .tint),
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            height: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .height *
-                                                                0.01,
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                  "${daily.windSpeed} m/s"),
-                                                              SizedBox(
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.01,
-                                                              ),
-                                                              Icon(
-                                                                  FontAwesomeIcons
-                                                                      .wind),
-                                                            ],
-                                                          ),
-                                                          if (daily.rain != 0.0)
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                    "${daily.rain} mm"),
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.01,
-                                                                ),
-                                                                Icon(FontAwesomeIcons
-                                                                    .cloudRain),
-                                                              ],
+                                                                            1)))),
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
                                                             ),
-                                                        ],
-                                                      ),
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "${convertFahrenheitToCelcius(daily.temp.min).toStringAsFixed(0)}°C",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            Icon(FontAwesomeIcons
+                                                                .thermometerHalf),
+                                                            SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.01,
+                                                            ),
+                                                            Text(
+                                                              "${convertFahrenheitToCelcius(daily.temp.max).toStringAsFixed(0)}°C",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            Icon(FontAwesomeIcons
+                                                                .thermometerFull),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "${daily.humidity}%",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.01,
+                                                            ),
+                                                            Icon(
+                                                                FontAwesomeIcons
+                                                                    .tint),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "${daily.windSpeed} m/s",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.01,
+                                                            ),
+                                                            Icon(
+                                                                FontAwesomeIcons
+                                                                    .wind),
+                                                          ],
+                                                        ),
+                                                        if (daily.rain != 0.0)
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                "${daily.rain} mm",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.01,
+                                                              ),
+                                                              Icon(FontAwesomeIcons
+                                                                  .cloudRain),
+                                                            ],
+                                                          ),
+                                                      ],
                                                     ),
                                                   ),
-                                                );
-                                              }),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        print("Error ->" +
-                                            snapshot.error.toString());
-                                        return Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.error_outline,
-                                                color: Colors.red,
-                                                size: 60,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 16),
-                                                child: Text(
-                                                    'Error: ${snapshot.error}'),
-                                              )
-                                            ],
+                                                ),
+                                              );
+                                            }),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      print("Error ->" +
+                                          snapshot.error.toString());
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red,
+                                            size: 60,
                                           ),
-                                        );
-                                      } else {
-                                        return Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                                width: 60,
-                                                height: 60,
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 16),
+                                            child: Text(
+                                              'Error: ${snapshot.error}',
+                                              style: TextStyle(
+                                                color: Colors.white,
                                               ),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 16),
-                                                child: Text(
-                                                    "Récupération des données..."),
-                                              )
-                                            ],
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    } else {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            child: CircularProgressIndicator(),
+                                            width: 60,
+                                            height: 60,
                                           ),
-                                        );
-                                      }
-                                    },
-                                  )
-                                ],
-                              ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 16),
+                                            child: Text(
+                                              "Récupération des données...",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }
+                                  },
+                                )
+                              ],
                             );
                           } else if (snapshot.hasError) {
                             print("Error ->" + snapshot.error.toString());
@@ -465,7 +614,12 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 16),
-                                    child: Text('Error: ${snapshot.error}'),
+                                    child: Text(
+                                      'Error: ${snapshot.error}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
@@ -483,7 +637,12 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(top: 16),
-                                    child: Text("Récupération des données..."),
+                                    child: Text(
+                                      "Récupération des données...",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
