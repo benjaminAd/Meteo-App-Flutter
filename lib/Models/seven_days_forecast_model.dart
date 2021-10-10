@@ -29,8 +29,8 @@ class SevenDaysForecastModel {
   set daily(List<Daily> daily) => _daily = daily;
 
   SevenDaysForecastModel.fromJson(Map<String, dynamic> json) {
-    _lat = (json['lat']!=null)?json['lat'].toDouble():0;
-    _lon = (json['lon']!=null)?json['lon'].toDouble():0;
+    _lat = (json['lat'] != null) ? json['lat'].toDouble() : 0;
+    _lon = (json['lon'] != null) ? json['lon'].toDouble() : 0;
     _timezone = json['timezone'];
     _timezoneOffset = json['timezone_offset'];
     if (json['daily'] != null) {
@@ -192,7 +192,7 @@ class Daily {
     _windSpeed =
         (json['wind_speed'] != null) ? json['wind_speed'].toDouble() : 0;
     _windDeg = json['wind_deg'];
-    _windGust = json['wind_gust'];
+    _windGust = (json['wind_gust'] != null) ? json['wind_gust'].toDouble() : 0;
     if (json['weather'] != null) {
       _weather = [];
       json['weather'].forEach((v) {
