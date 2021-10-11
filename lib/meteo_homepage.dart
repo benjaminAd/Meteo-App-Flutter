@@ -146,7 +146,10 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                               .format(DateTime.now()),
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: MediaQuery.of(context).size.width*0.04,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
                                           ),
                                         ),
                                       ],
@@ -213,12 +216,17 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                     ),
                                     Text(
                                       current_weather.weather.first.main,
-                                      style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.width*0.1,),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.1,
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
-                                      MediaQuery.of(context).size.height *
-                                          0.05,
+                                          MediaQuery.of(context).size.height *
+                                              0.05,
                                     ),
                                     Row(
                                       children: [
@@ -226,7 +234,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                             child: Column(
                                           children: [
                                             Text(
-                                              "${convertMSToKmH(current_weather.wind.speed).toStringAsFixed(0)} Km/H",
+                                              "${convertMSToKmH(current_weather.wind.speed).toStringAsFixed(0)} Km/h",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: MediaQuery.of(context)
@@ -263,49 +271,51 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                         if (current_weather
                                                 .weather.first.main ==
                                             "Rain")
-                                          if(current_weather.rain.d1h!= 0.0)Expanded(
-                                              child: Column(
-                                            children: [
-                                              Text(
-                                                "${current_weather.rain.d1h} mm",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.05,
+                                          if (current_weather.rain.d1h != 0.0)
+                                            Expanded(
+                                                child: Column(
+                                              children: [
+                                                Text(
+                                                  "${current_weather.rain.d1h} mm",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                  ),
                                                 ),
-                                              ),
-                                              Icon(
-                                                FontAwesomeIcons.cloudRain,
-                                                color: Colors.blueAccent,
-                                              ),
-                                            ],
-                                          )),
+                                                Icon(
+                                                  FontAwesomeIcons.cloudRain,
+                                                  color: Colors.blueAccent,
+                                                ),
+                                              ],
+                                            )),
                                         if (current_weather
                                                 .weather.first.main ==
                                             "Rain")
-                                          if(current_weather.rain.d3h!= 0.0)Expanded(
-                                              child: Column(
-                                            children: [
-                                              Text(
-                                                "${current_weather.rain.d3h} mm",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.05,
+                                          if (current_weather.rain.d3h != 0.0)
+                                            Expanded(
+                                                child: Column(
+                                              children: [
+                                                Text(
+                                                  "${current_weather.rain.d3h} mm",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                  ),
                                                 ),
-                                              ),
-                                              Icon(
-                                                FontAwesomeIcons.cloudRain,
-                                                color: Colors.lightBlue,
-                                              ),
-                                            ],
-                                          )),
+                                                Icon(
+                                                  FontAwesomeIcons.cloudRain,
+                                                  color: Colors.lightBlue,
+                                                ),
+                                              ],
+                                            )),
                                       ],
                                     ),
                                     SizedBox(
@@ -354,7 +364,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                                   0xEE, 0x5D, 0x6C, 1),
                                             ),
                                             Text(
-                                              DateFormat("H:m").format(DateTime
+                                              DateFormat("HH:mm").format(DateTime
                                                   .fromMillisecondsSinceEpoch(
                                                       current_weather
                                                               .sys.sunset *
@@ -479,37 +489,63 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                                               .width *
                                                           0.02),
                                               child: Container(
+                                                alignment: Alignment.center,
                                                 color: Color.fromRGBO(
                                                     0x79, 0x79, 0xA3, 0.3),
                                                 child: SingleChildScrollView(
                                                   child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
                                                     children: [
-                                                      SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.01,
+                                                      ),
                                                       Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
                                                         children: [
                                                           getWeatherIcon(
                                                               weatherDescription:
-                                                              daily.weather
-                                                                  .first.main,
+                                                                  daily
+                                                                      .weather
+                                                                      .first
+                                                                      .main,
                                                               size: MediaQuery.of(
-                                                                  context)
-                                                                  .size
-                                                                  .width *
+                                                                          context)
+                                                                      .size
+                                                                      .width *
                                                                   0.05),
-                                                          SizedBox(width: MediaQuery.of(context).size.width*0.05,),
+                                                          SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.05,
+                                                          ),
                                                           Text(
-                                                            new DateFormat('EEEE')
-                                                                .format(DateTime.fromMillisecondsSinceEpoch(daily.dt*1000)),
+                                                            new DateFormat(
+                                                                    'EEEE')
+                                                                .format(DateTime
+                                                                    .fromMillisecondsSinceEpoch(
+                                                                        daily.dt *
+                                                                            1000)),
                                                             style: TextStyle(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                      SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                                                      SizedBox(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.01,
+                                                      ),
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -585,7 +621,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                                                 .center,
                                                         children: [
                                                           Text(
-                                                            "${convertMSToKmH(daily.windSpeed).toStringAsFixed(0)} Km/H",
+                                                            "${convertMSToKmH(daily.windSpeed).toStringAsFixed(0)} Km/h",
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -627,7 +663,14 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
                                                                     .cloudRain),
                                                           ],
                                                         ),
-                                                      if (daily.rain != 0.0) SizedBox(height: MediaQuery.of(context).size.height *0.01,),
+                                                      if (daily.rain != 0.0)
+                                                        SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.01,
+                                                        ),
                                                     ],
                                                   ),
                                                 ),
@@ -785,7 +828,7 @@ class _MeteoHomePageState extends State<MeteoHomePage> {
     return (us_temp - 273.15);
   }
 
-  double convertMSToKmH(double speed){
-    return (speed*3.6);
+  double convertMSToKmH(double speed) {
+    return (speed * 3.6);
   }
 }
