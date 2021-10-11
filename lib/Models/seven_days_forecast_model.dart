@@ -31,8 +31,9 @@ class SevenDaysForecastModel {
   SevenDaysForecastModel.fromJson(Map<String, dynamic> json) {
     _lat = (json['lat'] != null) ? json['lat'].toDouble() : 0;
     _lon = (json['lon'] != null) ? json['lon'].toDouble() : 0;
-    _timezone = json['timezone'];
-    _timezoneOffset = json['timezone_offset'];
+    _timezone = (json['timezone'] != null) ? json['timezone'] : 0;
+    _timezoneOffset =
+        (json['timezone_offset'] != null) ? json['timezone_offset'] : 0;
     if (json['daily'] != null) {
       _daily = [];
       json['daily'].forEach((v) {
@@ -173,11 +174,11 @@ class Daily {
   set rain(double rain) => _rain = rain;
 
   Daily.fromJson(Map<String, dynamic> json) {
-    _dt = json['dt'];
-    _sunrise = json['sunrise'];
-    _sunset = json['sunset'];
-    _moonrise = json['moonrise'];
-    _moonset = json['moonset'];
+    _dt = (json['dt'] != null) ? json['dt'] : 0;
+    _sunrise = (json['sunrise'] != null) ? json['sunrise'] : 0;
+    _sunset = (json['sunset'] != null) ? json['sunset'] : 0;
+    _moonrise = (json['moonrise'] != null) ? json['moonrise'] : 0;
+    _moonset = (json['moonset'] != null) ? json['moonset'] : 0;
     _moonPhase =
         (json['moon_phase'] != null) ? json['moon_phase'].toDouble() : 0;
     _temp = json['temp'] != null
@@ -186,12 +187,12 @@ class Daily {
     _feelsLike = json['feels_like'] != null
         ? new FeelsLike.fromJson(json['feels_like'])
         : new FeelsLike(0, 0, 0, 0);
-    _pressure = json['pressure'];
-    _humidity = json['humidity'];
+    _pressure = (json['pressure'] != null) ? json['pressure'] : 0;
+    _humidity = (json['humidity'] != null) ? json['humidity'] : 0;
     _dewPoint = (json['dew_point'] != null) ? json['dew_point'].toDouble() : 0;
     _windSpeed =
         (json['wind_speed'] != null) ? json['wind_speed'].toDouble() : 0;
-    _windDeg = json['wind_deg'];
+    _windDeg = (json['wind_deg'] != null) ? json['wind_deg'] : 0;
     _windGust = (json['wind_gust'] != null) ? json['wind_gust'].toDouble() : 0;
     if (json['weather'] != null) {
       _weather = [];
@@ -199,7 +200,7 @@ class Daily {
         _weather.add(new Weather.fromJson(v));
       });
     }
-    _clouds = json['clouds'];
+    _clouds = (json['clouds'] != null) ? json['clouds'] : 0;
     _pop = (json['pop'] != null) ? json['pop'].toDouble() : 0;
     _uvi = (json['uvi'] != null) ? json['uvi'].toDouble() : 0;
     _rain = (json['rain'] != null) ? json['rain'].toDouble() : 0;
@@ -357,10 +358,10 @@ class Weather {
   set icon(String icon) => _icon = icon;
 
   Weather.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _main = json['main'];
-    _description = json['description'];
-    _icon = json['icon'];
+    _id = (json['id'] != null) ? json['id'] : 0;
+    _main = (json['main'] != null) ? json['main'] : "";
+    _description = (json['description'] != null) ? json['description'] : "";
+    _icon = (json['icon'] != null) ? json['icon'] : "";
   }
 
   Map<String, dynamic> toJson() {

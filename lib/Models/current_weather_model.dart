@@ -98,7 +98,7 @@ class CurrentWeatherModel {
         _weather.add(new Weather.fromJson(v));
       });
     }
-    _base = json['base'];
+    _base = (json['base'] != null) ? json['base'] : "";
     _main = json['main'] != null
         ? new Main.fromJson(json['main'])
         : new Main(0, 0, 0, 0, 0, 0);
@@ -108,16 +108,17 @@ class CurrentWeatherModel {
     _clouds = json['clouds'] != null
         ? new Clouds.fromJson(json['clouds'])
         : new Clouds(0);
-    _rain =
-        (json['rain'] != null ? new Rain.fromJson(json['rain']) : new Rain(0,0));
+    _rain = (json['rain'] != null
+        ? new Rain.fromJson(json['rain'])
+        : new Rain(0, 0));
     _dt = json['dt'];
     _sys = json['sys'] != null
         ? new Sys.fromJson(json['sys'])
         : new Sys(0, 0, "", 0, 0);
-    _timezone = json['timezone'];
-    _id = json['id'];
-    _name = json['name'];
-    _cod = json['cod'];
+    _timezone = (json['timezone'] != null) ? json['timezone'] : 0;
+    _id = (json['id'] != null) ? json['id'] : 0;
+    _name = (json['name'] != null) ? json['name'] : "";
+    _cod = (json['cod'] != null) ? json['cod'] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -169,8 +170,8 @@ class Coord {
   set lat(double lat) => _lat = lat;
 
   Coord.fromJson(Map<String, dynamic> json) {
-    _lon = json['lon'].toDouble();
-    _lat = json['lat'].toDouble();
+    _lon = (json['lon'] != null) ? json['lon'].toDouble() : 0;
+    _lat = (json['lat'] != null) ? json['lat'].toDouble() : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -206,10 +207,10 @@ class Weather {
   set icon(String icon) => _icon = icon;
 
   Weather.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _main = json['main'];
-    _description = json['description'];
-    _icon = json['icon'];
+    _id = (json['id'] != null) ? json['id'] : 0;
+    _main = (json['main'] != null) ? json['main'] : 0;
+    _description = (json['description'] != null) ? json['description'] : 0;
+    _icon = (json['icon'] != null) ? json['icon'] : "";
   }
 
   Map<String, dynamic> toJson() {
@@ -258,12 +259,13 @@ class Main {
   set humidity(int humidity) => _humidity = humidity;
 
   Main.fromJson(Map<String, dynamic> json) {
-    _temp = json['temp'].toDouble();
-    _feelsLike = json['feels_like'].toDouble();
-    _tempMin = json['temp_min'].toDouble();
-    _tempMax = json['temp_max'].toDouble();
-    _pressure = json['pressure'];
-    _humidity = json['humidity'];
+    _temp = (json['temp'] != null) ? json['temp'].toDouble() : 0;
+    _feelsLike =
+        (json['feels_like'] != null) ? json['feels_like'].toDouble() : 0;
+    _tempMin = (json['temp_min'] != null) ? json['temp_min'].toDouble() : 0;
+    _tempMax = (json['temp_max'] != null) ? json['temp_max'].toDouble() : 0;
+    _pressure = (json['pressure'] != null) ? json['pressure'] : 0;
+    _humidity = (json['humidity'] != null) ? json['humidity'] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -293,8 +295,8 @@ class Wind {
   set deg(int deg) => _deg = deg;
 
   Wind.fromJson(Map<String, dynamic> json) {
-    _speed = json['speed'].toDouble();
-    _deg = json['deg'];
+    _speed = (json['speed'] != null) ? json['speed'].toDouble() : 0;
+    _deg = (json['deg'] != null) ? json['deg'] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -315,7 +317,7 @@ class Clouds {
   set all(int all) => _all = all;
 
   Clouds.fromJson(Map<String, dynamic> json) {
-    _all = json['all'];
+    _all = (json['all'] != null) ? json['all'] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -357,9 +359,9 @@ class Sys {
   Sys.fromJson(Map<String, dynamic> json) {
     _type = (json['type'] != null) ? json['type'] : 0;
     _id = (json['id'] != null) ? json['id'] : 0;
-    _country = json['country'];
-    _sunrise = json['sunrise'];
-    _sunset = json['sunset'];
+    _country = (json['country'] != null) ? json['country'] : "";
+    _sunrise = (json['sunrise'] != null) ? json['sunrise'] : 0;
+    _sunset = (json['sunset'] != null) ? json['sunset'] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -377,13 +379,11 @@ class Rain {
   late double _d3h;
   late double _d1h;
 
-
   Rain(this._d3h, this._d1h);
 
   double get d3h => _d3h;
 
   set d3h(double d3h) => _d3h = d3h;
-
 
   double get d1h => _d1h;
 
@@ -399,7 +399,7 @@ class Rain {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['3h'] = this._d3h;
-    data['1h']= this._d1h;
+    data['1h'] = this._d1h;
     return data;
   }
 }
